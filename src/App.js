@@ -15,12 +15,28 @@ const App = () => {
 	const getMovieRequest = async (searchValue) => {
 		const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=58bab053`;
 
-		const response = await fetch(url);
-		const responseJson = await response.json();
+		fetch(url)
+					.then(function (response) {
+							if(!response.ok){
+									console.log(response);
+									throw Error(response.statusText);
+							}
+							return response.json();
+					})
+					.then(function (movieJSON) {
+						if (movieJSON.Search) {
+							setMovies(movieJSON.Search);
+						}
+			}).catch(function(error){
+					console.log('Whoopsie!', error);
+			});
 
-		if (responseJson.Search) {
-			setMovies(responseJson.Search);
-		}
+		// const response = await fetch(url);
+		// const responseJson = await response.json();
+		//
+		// if (responseJson.Search) {
+		// 	setMovies(responseJson.Search);
+		// }
 	};
 
 	useEffect(() => {
